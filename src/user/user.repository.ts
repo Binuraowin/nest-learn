@@ -16,7 +16,6 @@ export class UserRepository {
   }
 
   async findAll(page: number, limit: number): Promise<User[]> {
-    console.log("user repository impl")
     const skip = (page - 1) * limit;
     return this.userRepository.find({ skip, take: limit });
   }

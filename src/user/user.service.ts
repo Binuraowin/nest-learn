@@ -17,7 +17,6 @@ export class UserService {
    * @returns A promise that resolves to an array of User objects representing the users in the specified page.
    */
   async findAll(page: number, limit: number): Promise<User[]> {
-    console.log("user service")
     const users = await this.userRepository.findAll(page, limit);
     return users;
   }
