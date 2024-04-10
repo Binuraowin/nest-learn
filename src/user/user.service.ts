@@ -1,14 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UserRepository } from './user.repository';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    private readonly userRepository: UserRepository,
   ) {}
 
   /**
@@ -18,17 +16,19 @@ export class UserService {
    * @param limit The maximum number of users per page.
    * @returns A promise that resolves to an array of User objects representing the users in the specified page.
    */
-  findAll(page: number, limit: number): Promise<User[]> {
-    const skip = (page - 1) * limit;
-    return this.userRepository.find({ skip, take: limit });
+  async findAll(page: number, limit: number): Promise<User[]> {
+    console.log("user service")
+    const users = await this.userRepository.findAll(page, limit);
+    return users;
   }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
-    const newUser = this.userRepository.create(createUserDto);
-    return await this.userRepository.save(newUser);
+    const newUser = await this.userRepository.create(createUserDto);
+    return newUser;
   }
-  async getUsers(): Promise<User[]> {
-    return await this.userRepository.find({});
-}
 
+  async getUsers(): Promise<User[]> {
+    const users = await this.userRepository.getUsers();
+    return users;
+  }
 }
